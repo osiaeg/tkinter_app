@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "F:/\u00a0/Python/sber_app.py"
+   "value": "F:/\u00a0/Github/tkinter_app/sber_app.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "F:/\u00a0/Python/sberbank.ico"
+   "value": "F:/\u00a0/Github/tkinter_app/sberbank.ico"
   },
   {
    "optionDest": "name",
@@ -67,7 +67,7 @@
   },
   {
    "optionDest": "datas",
-   "value": "F:/\u00a0/Python/sberbank.ico;."
+   "value": "F:/\u00a0/Github/tkinter_app/sberbank.ico;."
   }
  ],
  "nonPyinstallerOptions": {

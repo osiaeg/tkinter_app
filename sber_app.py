@@ -51,7 +51,7 @@ def take_pay() -> None:
 
 if __name__ == '__main__':
     screen = Tk()
-    screen.iconbitmap('sberbank.ico')
+    screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
 
     screen.resizable(width=False, height=False)
     screen.geometry('410x230')
