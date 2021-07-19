@@ -1,0 +1,5 @@
+1. Run this command in terminal
+autopytoexe.exe
+
+2. Import config file for convertor
+py_exe_config.exe
