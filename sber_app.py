@@ -1,22 +1,5 @@
 from tkinter import Button, Label, Entry, W, Tk, messagebox
-import json
-import os
-
-
-def test_func() -> None:
-    os.system('calc.exe')
-
-
-def validation() -> tuple:
-    summa = float(summ.get())
-    number = int(Number.get())
-    date = Date.get()
-    distr = Distr.get()
-    full_name = FullName.get()
-    num_doc = NumDoc.get()
-
-    fields = (summa, number, date, distr, full_name, num_doc)
-    return fields
+import os, sys, json
 
 
 def take_pay() -> None:
@@ -25,7 +8,21 @@ def take_pay() -> None:
     :return: None
     """
 
-    summa, number, date, distr, full_name, num_doc = validation()
+    try:
+        summa = summ.get()
+        if ',' in summa:
+            summa = summa.replace(',', '.')
+        else:
+            summa = str(float(summa))
+    except ValueError:
+        summ.delete(0, 'end')
+        messagebox.showinfo('Info', 'Summ isn\'t correct')
+
+    number = Number.get()
+    date = Date.get()
+    distr = Distr.get()
+    full_name = FullName.get()
+    num_doc = NumDoc.get()
 
     order = {
         'summa': summa,
@@ -37,28 +34,40 @@ def take_pay() -> None:
         'client': {
             'fullName': full_name,
             'numDoc': num_doc
-        }
+        },
+        'resident': '1'
     }
 
-    for_human = json.dumps(order, ensure_ascii=False, indent=2)
+    for_human = json.dumps(order, ensure_ascii=False, indent=4)
     print(for_human)
 
     order = json.dumps(order, ensure_ascii=False)
-    messagebox.showinfo('Result', order)
-    messagebox.showwarning('Result', order)
-    messagebox.showerror('Result', order)
+
+    ans = messagebox.askyesno('Question', 'Are you sure ?', icon='warning')
+
+    if ans:
+        util = os.path.abspath('join.txt')
+        command = f"{util} /new {order}"
+        print(command)
+
+        # For windows test
+        # os.system('calc.exe')
+
+        # For windows test
+        os.system('neofetch')
+        sys.exit(1)
 
 
 if __name__ == '__main__':
     screen = Tk()
-    screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
+    #screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
 
     screen.resizable(width=False, height=False)
-    screen.geometry('410x230')
+    screen.geometry('410x200')
     screen.title('Take pay')
 
     # Events
-    TSumm = Label(text='Summa:', font='Consolas')
+    TSumm = Label(text='Сумма перевода:', font='Consolas')
     summ = Entry(screen, font='Consolas')
 
     TNumber = Label(text='Number:', font='Consolas')
@@ -76,8 +85,8 @@ if __name__ == '__main__':
     TNumDoc = Label(text='numDoc:', font='Consolas')
     NumDoc = Entry(screen, font='Consolas')
 
+    # Bind command on button
     enter = Button(text='Pay', font='Consolas', width=18, command=take_pay)
-    test = Button(text='Test', font='Consolas', width=18, command=test_func)
 
     # Packers
     TSumm.grid(row=0, column=0, sticky=W, padx=1, pady=1)
@@ -99,7 +108,6 @@ if __name__ == '__main__':
     NumDoc.grid(row=5, column=1, padx=1, pady=1)
 
     enter.grid(row=7, column=0, padx=1, pady=1)
-    test.grid(row=7, column=1, padx=1, pady=1)
 
     # The end
     screen.mainloop()
