@@ -14,9 +14,8 @@ def validation() -> tuple:
     distr = Distr.get()
     full_name = FullName.get()
     num_doc = NumDoc.get()
-    resident = Resident.get()
 
-    fields = (summa, number, date, distr, full_name, num_doc, resident)
+    fields = (summa, number, date, distr, full_name, num_doc)
     return fields
 
 
@@ -26,7 +25,7 @@ def take_pay() -> None:
     :return: None
     """
 
-    summa, number, date, distr, full_name, num_doc, resident = validation()
+    summa, number, date, distr, full_name, num_doc = validation()
 
     order = {
         'summa': summa,
@@ -38,8 +37,7 @@ def take_pay() -> None:
         'client': {
             'fullName': full_name,
             'numDoc': num_doc
-        },
-        'resident': resident
+        }
     }
 
     for_human = json.dumps(order, ensure_ascii=False, indent=2)
@@ -47,6 +45,8 @@ def take_pay() -> None:
 
     order = json.dumps(order, ensure_ascii=False)
     messagebox.showinfo('Result', order)
+    messagebox.showwarning('Result', order)
+    messagebox.showerror('Result', order)
 
 
 if __name__ == '__main__':
@@ -76,9 +76,6 @@ if __name__ == '__main__':
     TNumDoc = Label(text='numDoc:', font='Consolas')
     NumDoc = Entry(screen, font='Consolas')
 
-    TResident = Label(text='Resident:', font='Consolas')
-    Resident = Entry(screen, font='Consolas')
-
     enter = Button(text='Pay', font='Consolas', width=18, command=take_pay)
     test = Button(text='Test', font='Consolas', width=18, command=test_func)
 
@@ -100,9 +97,6 @@ if __name__ == '__main__':
 
     TNumDoc.grid(row=5, column=0, sticky=W, padx=1, pady=1)
     NumDoc.grid(row=5, column=1, padx=1, pady=1)
-
-    TResident.grid(row=6, column=0, sticky=W, padx=1, pady=1)
-    Resident.grid(row=6, column=1, padx=1, pady=1)
 
     enter.grid(row=7, column=0, padx=1, pady=1)
     test.grid(row=7, column=1, padx=1, pady=1)
