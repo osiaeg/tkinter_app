@@ -1,5 +1,6 @@
 from tkinter import Button, Label, Entry, W, Tk, messagebox
 import os, sys, json
+from datetime import date as dt
 
 
 def take_pay() -> None:
@@ -8,15 +9,11 @@ def take_pay() -> None:
     :return: None
     """
 
-    try:
-        summa = summ.get()
-        if ',' in summa:
-            summa = summa.replace(',', '.')
-        else:
-            summa = str(float(summa))
-    except ValueError:
-        summ.delete(0, 'end')
-        messagebox.showinfo('Info', 'Summ isn\'t correct')
+    summa = summ.get()
+    if ',' in summa:
+        summa = summa.replace(',', '.')
+    else:
+        summa = str(float(summa))
 
     number = Number.get()
     date = Date.get()
@@ -75,6 +72,7 @@ if __name__ == '__main__':
 
     TDate = Label(text='Date:', font='Consolas')
     Date = Entry(screen, font='Consolas')
+    Date.insert(0, dt.today().strftime('%d.%m.%y'))
 
     TDistr = Label(text='Distr:', font='Consolas')
     Distr = Entry(screen, font='Consolas')
