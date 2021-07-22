@@ -1,6 +1,8 @@
-from tkinter import Button, Label, Entry, W, Tk, messagebox
-import os, sys, json
+import sys, os, json
 from datetime import date as dt
+from tkinter import W, messagebox
+from tkinter.ttk import Button, Label, Entry
+from ttkthemes import ThemedTk
 
 
 def take_pay() -> None:
@@ -39,52 +41,48 @@ def take_pay() -> None:
     print(for_human)
 
     order = json.dumps(order, ensure_ascii=False)
-
-    ans = messagebox.askyesno('Question', 'Are you sure ?', icon='warning')
+    ans = messagebox.askyesno('', 'Вы уверены ?', icon='warning')
 
     if ans:
-        util = os.path.abspath('join.txt')
-        command = f"{util} /new {order}"
-        print(command)
+        command = f'join.exe /new {order}'
 
         # For windows test
         # os.system('calc.exe')
+        os.system(command)
 
-        # For windows test
-        os.system('neofetch')
         sys.exit(1)
 
 
 if __name__ == '__main__':
-    screen = Tk()
-    #screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
+    screen = ThemedTk(theme="breeze")
+    screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
 
-    screen.resizable(width=False, height=False)
-    screen.geometry('410x200')
+    screen.resizable(0, 0)
+    screen.geometry('350x260')
     screen.title('Take pay')
 
     # Events
     TSumm = Label(text='Сумма перевода:', font='Consolas')
     summ = Entry(screen, font='Consolas')
 
-    TNumber = Label(text='Number:', font='Consolas')
+    TNumber = Label(text='Номер документа:', font='Consolas')
     Number = Entry(screen, font='Consolas')
 
-    TDate = Label(text='Date:', font='Consolas')
+    TDate = Label(text='Дата:', font='Consolas')
     Date = Entry(screen, font='Consolas')
     Date.insert(0, dt.today().strftime('%d.%m.%y'))
 
-    TDistr = Label(text='Distr:', font='Consolas')
+    TDistr = Label(text='Описание:', font='Consolas')
     Distr = Entry(screen, font='Consolas')
 
-    TFullName = Label(text='Full Name:', font='Consolas')
+    TFullName = Label(text='ФИО:', font='Consolas')
     FullName = Entry(screen, font='Consolas')
 
     TNumDoc = Label(text='numDoc:', font='Consolas')
     NumDoc = Entry(screen, font='Consolas')
 
     # Bind command on button
-    enter = Button(text='Pay', font='Consolas', width=18, command=take_pay)
+    enter = Button(text='Совершить перевод',  width=18, command=take_pay)
 
     # Packers
     TSumm.grid(row=0, column=0, sticky=W, padx=1, pady=1)
