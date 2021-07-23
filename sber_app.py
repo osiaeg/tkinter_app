@@ -1,6 +1,6 @@
 import sys, os, json
 from datetime import date as dt
-from tkinter import W, messagebox
+from tkinter import W, messagebox, PhotoImage
 from tkinter.ttk import Button, Label, Entry
 from ttkthemes import ThemedTk
 
@@ -50,12 +50,13 @@ def take_pay() -> None:
         # os.system('calc.exe')
         os.system(command)
 
-        sys.exit(1)
+        screen.destroy()
 
 
 if __name__ == '__main__':
     screen = ThemedTk(theme="breeze")
-    screen.iconbitmap('F:/ /Github/tkinter_app/sberbank.ico')
+    img = PhotoImage(file='sber_logo.png')
+    screen.wm_iconphoto(True, img)
 
     screen.resizable(0, 0)
     screen.geometry('350x260')
