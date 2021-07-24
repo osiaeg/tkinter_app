@@ -1,8 +1,8 @@
-import os, json
+import os, json, sys
 from tkinter import W, messagebox, PhotoImage
-from tkinter.ttk import Button, Label, Entry, Style
+from tkinter.ttk import Button, Label, Entry
 from ttkthemes import ThemedTk
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import DateEntry
 
 
 def take_pay() -> None:
@@ -15,7 +15,7 @@ def take_pay() -> None:
     summa = summ.get()
     try:
         if ',' in summa:
-            summa = summa.replace(',', '.')
+            summa = str(float(summa.replace(',', '.')))
         else:
             summa = str(float(summa))
     except ValueError:
@@ -63,9 +63,21 @@ def take_pay() -> None:
             screen.destroy()
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 if __name__ == '__main__':
     screen = ThemedTk(theme="breeze")
-    img = PhotoImage(file='sber_logo.png')
+    file = resource_path('sber_logo.png')
+    img = PhotoImage(file=file)
     screen.wm_iconphoto(True, img)
 
     screen.resizable(0, 0)
@@ -81,13 +93,11 @@ if __name__ == '__main__':
 
     TDate = Label(text='Дата:', font='Consolas')
     Date = DateEntry(screen,
-                     date_pattern='MM.dd.yyyy',
+                     date_pattern='dd.MM.yyyy',
                      locale='ru_RU',
                      width=18,
                      font='Consolas'
                      )
-    #Date = Entry(screen, font='Consolas')
-    #Date.insert(0, dt.today().strftime('%d.%m.%y'))
 
     TDistr = Label(text='Описание транзакции:', font='Consolas')
     Distr = Entry(screen, font='Consolas')

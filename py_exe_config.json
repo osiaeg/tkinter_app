@@ -23,7 +23,7 @@
   },
   {
    "optionDest": "name",
-   "value": "pay_app"
+   "value": "pay"
   },
   {
    "optionDest": "ascii",
@@ -67,7 +67,7 @@
   },
   {
    "optionDest": "datas",
-   "value": "F:/\u00a0/Github/tkinter_app/sberbank.ico;."
+   "value": "F:/\u00a0/Github/tkinter_app/sber_logo.png;."
   }
  ],
  "nonPyinstallerOptions": {
