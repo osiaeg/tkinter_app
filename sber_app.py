@@ -1,8 +1,8 @@
-import sys, os, json
-from datetime import date as dt
+import os, json
 from tkinter import W, messagebox, PhotoImage
-from tkinter.ttk import Button, Label, Entry
+from tkinter.ttk import Button, Label, Entry, Style
 from ttkthemes import ThemedTk
+from tkcalendar import Calendar, DateEntry
 
 
 def take_pay() -> None:
@@ -10,12 +10,17 @@ def take_pay() -> None:
     Create order to take pay from the form
     :return: None
     """
+    is_data_correct = True
 
     summa = summ.get()
-    if ',' in summa:
-        summa = summa.replace(',', '.')
-    else:
-        summa = str(float(summa))
+    try:
+        if ',' in summa:
+            summa = summa.replace(',', '.')
+        else:
+            summa = str(float(summa))
+    except ValueError:
+        is_data_correct = False
+        messagebox.showinfo('', 'Сумма содержит недопустимые символы')
 
     number = Number.get()
     date = Date.get()
@@ -23,34 +28,39 @@ def take_pay() -> None:
     full_name = FullName.get()
     num_doc = NumDoc.get()
 
-    order = {
-        'summa': summa,
-        'order': {
-            'number': number,
-            'date': date,
-            'distr': distr
-        },
-        'client': {
-            'fullName': full_name,
-            'numDoc': num_doc
-        },
-        'resident': '1'
-    }
+    if not all((number, date, distr, full_name, num_doc)):
+        is_data_correct = False
+        messagebox.showinfo('', 'Не все поля формы заполнены')
 
-    for_human = json.dumps(order, ensure_ascii=False, indent=4)
-    print(for_human)
+    if is_data_correct and all((number, date, distr, full_name, num_doc)):
+        order = {
+            'summa': summa,
+            'order': {
+                'number': number,
+                'date': date,
+                'distr': distr
+            },
+            'client': {
+                'fullName': full_name,
+                'numDoc': num_doc
+            },
+            'resident': '1'
+        }
 
-    order = json.dumps(order, ensure_ascii=False)
-    ans = messagebox.askyesno('', 'Вы уверены ?', icon='warning')
+        for_human = json.dumps(order, ensure_ascii=False, indent=4)
+        print(for_human)
 
-    if ans:
-        command = f'join.exe /new {order}'
+        order = json.dumps(order, ensure_ascii=False)
+        ans = messagebox.askyesno('', 'Данные внесены корректно ?', icon='warning')
 
-        # For windows test
-        # os.system('calc.exe')
-        os.system(command)
+        if ans:
+            command = f'join.exe /new {order}'
 
-        screen.destroy()
+            # For windows test
+            # os.system('calc.exe')
+            os.system(command)
+
+            screen.destroy()
 
 
 if __name__ == '__main__':
@@ -59,27 +69,33 @@ if __name__ == '__main__':
     screen.wm_iconphoto(True, img)
 
     screen.resizable(0, 0)
-    screen.geometry('350x260')
-    screen.title('Take pay')
+    screen.geometry('460x260')
+    screen.title('Перевод на карту')
 
     # Events
-    TSumm = Label(text='Сумма перевода:', font='Consolas')
+    TSumm = Label(text='Сумма транзакции:', font='Consolas')
     summ = Entry(screen, font='Consolas')
 
     TNumber = Label(text='Номер документа:', font='Consolas')
     Number = Entry(screen, font='Consolas')
 
     TDate = Label(text='Дата:', font='Consolas')
-    Date = Entry(screen, font='Consolas')
-    Date.insert(0, dt.today().strftime('%d.%m.%y'))
+    Date = DateEntry(screen,
+                     date_pattern='MM.dd.yyyy',
+                     locale='ru_RU',
+                     width=18,
+                     font='Consolas'
+                     )
+    #Date = Entry(screen, font='Consolas')
+    #Date.insert(0, dt.today().strftime('%d.%m.%y'))
 
-    TDistr = Label(text='Описание:', font='Consolas')
+    TDistr = Label(text='Описание транзакции:', font='Consolas')
     Distr = Entry(screen, font='Consolas')
 
     TFullName = Label(text='ФИО:', font='Consolas')
     FullName = Entry(screen, font='Consolas')
 
-    TNumDoc = Label(text='numDoc:', font='Consolas')
+    TNumDoc = Label(text='Паспортные данные получателя:', font='Consolas')
     NumDoc = Entry(screen, font='Consolas')
 
     # Bind command on button
