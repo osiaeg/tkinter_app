@@ -1,8 +1,11 @@
-import os, json, sys
+import json
+import os
+import sys
 from tkinter import W, messagebox, PhotoImage
 from tkinter.ttk import Button, Label, Entry
-from ttkthemes import ThemedTk
+
 from tkcalendar import DateEntry
+from ttkthemes import ThemedTk
 
 
 def take_pay() -> None:
@@ -15,9 +18,12 @@ def take_pay() -> None:
     summa = summ.get()
     try:
         if ',' in summa:
-            summa = str(float(summa.replace(',', '.')))
+            summa = float(summa.replace(',', '.'))
         else:
-            summa = str(float(summa))
+            summa = float(summa)
+
+        summa *= 100
+        summa = str(int(summa))
     except ValueError:
         is_data_correct = False
         messagebox.showinfo('', 'Сумма содержит недопустимые символы')
@@ -47,19 +53,13 @@ def take_pay() -> None:
             'resident': '1'
         }
 
-        for_human = json.dumps(order, ensure_ascii=False, indent=4)
-        print(for_human)
-
         order = json.dumps(order, ensure_ascii=False)
-        ans = messagebox.askyesno('', 'Данные внесены корректно ?', icon='warning')
+        order = order.replace('"', '\'')
+        ans = messagebox.askyesno('Проверка', 'Данные внесены корректно ?', icon='warning')
 
         if ans:
-            command = f'join.exe /new {order}'
-
-            # For windows test
-            # os.system('calc.exe')
+            command = f'join.exe /new "{order}"'
             os.system(command)
-
             screen.destroy()
 
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     NumDoc = Entry(screen, font='Consolas')
 
     # Bind command on button
-    enter = Button(text='Совершить перевод',  width=18, command=take_pay)
+    enter = Button(text='Совершить перевод', width=18, command=take_pay)
 
     # Packers
     TSumm.grid(row=0, column=0, sticky=W, padx=1, pady=1)
