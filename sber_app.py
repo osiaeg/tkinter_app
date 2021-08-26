@@ -28,17 +28,28 @@ def take_pay() -> None:
         is_data_correct = False
         messagebox.showinfo('', 'Сумма содержит недопустимые символы')
 
+    pan = Pan.get()
+
+    length = len(pan)
+    if length == 16 or length == 19:
+        if not pan.isdigit():
+            messagebox.showinfo('', 'Номер карты введен некорректно.')
+            is_data_correct = False
+    else:
+        messagebox.showinfo('', 'Номер карты введен некорректно.')
+        is_data_correct = False
+
     number = Number.get()
     date = Date.get()
     distr = Distr.get()
     full_name = FullName.get()
     num_doc = NumDoc.get()
 
-    if not all((number, date, distr, full_name, num_doc)):
+    if not all((number, date, distr, full_name, num_doc, pan)):
         is_data_correct = False
         messagebox.showinfo('', 'Не все поля формы заполнены')
 
-    if is_data_correct and all((number, date, distr, full_name, num_doc)):
+    if is_data_correct and all((number, date, distr, full_name, num_doc, pan)):
         order = {
             'summa': summa,
             'order': {
@@ -48,9 +59,12 @@ def take_pay() -> None:
             },
             'client': {
                 'fullName': full_name,
-                'numDoc': num_doc
+                'numDoc': num_doc,
+                'mail': '123@mail.ru',
+                'tel': '89170000000'
             },
-            'resident': '1'
+            'resident': '1',
+            'pan': pan
         }
 
         order = json.dumps(order, ensure_ascii=False)
@@ -81,7 +95,7 @@ if __name__ == '__main__':
     screen.wm_iconphoto(True, img)
 
     screen.resizable(0, 0)
-    screen.geometry('460x260')
+    screen.geometry('460x300')
     screen.title('Перевод на карту')
 
     # Events
@@ -108,6 +122,9 @@ if __name__ == '__main__':
     TNumDoc = Label(text='Паспортные данные получателя:', font='Consolas')
     NumDoc = Entry(screen, font='Consolas')
 
+    TPan = Label(text='Номер карты:', font='Consolas')
+    Pan = Entry(screen, font='Consolas')
+
     # Bind command on button
     enter = Button(text='Совершить перевод', width=18, command=take_pay)
 
@@ -129,6 +146,9 @@ if __name__ == '__main__':
 
     TNumDoc.grid(row=5, column=0, sticky=W, padx=1, pady=1)
     NumDoc.grid(row=5, column=1, padx=1, pady=1)
+
+    TPan.grid(row=6, column=0, sticky=W, padx=1, pady=1)
+    Pan.grid(row=6, column=1, padx=1, pady=1)
 
     enter.grid(row=7, column=0, padx=1, pady=1)
 
